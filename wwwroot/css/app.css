@@ -1,21 +1,22 @@
 :root {
     --byte-F: 100%;
-    --byte-E: 95%;
-    --byte-D: 90%;
-    --byte-C: 85%;
-    --byte-B: 80%;
-    --byte-A: 75%;
-    --byte-9: 70%;
-    --byte-8: 65%;
-    --byte-7: 60%;
-    --byte-6: 55%;
-    --byte-5: 50%;
-    --byte-4: 45%;
-    --byte-3: 40%;
-    --byte-2: 35%;
-    --byte-1: 30%;
-    --byte-0: 25%;
+    --byte-E: 96%;
+    --byte-D: 92%;
+    --byte-C: 88%;
+    --byte-B: 84%;
+    --byte-A: 80%;
+    --byte-9: 76%;
+    --byte-8: 72%;
+    --byte-7: 68%;
+    --byte-6: 64%;
+    --byte-5: 60%;
+    --byte-4: 56%;
+    --byte-3: 52%;
+    --byte-2: 48%;
+    --byte-1: 44%;
+    --byte-0: 40%;
 }
+
 html,
 body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;

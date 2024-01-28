@@ -1,3 +1,4 @@
+using System.Text;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Web;
@@ -6,6 +7,23 @@ using Microsoft.JSInterop;
 
 namespace visual_binary_analysis.Pages
 {
+    public readonly struct FileData(byte[] bytes)
+    {
+        public byte[] Bytes { get; } = bytes;
+        public List<string> Hex { get; } = BytesToHex(bytes);
+        public string Text { get; } = Encoding.UTF8.GetString(bytes);
+
+        static private List<string> BytesToHex(byte[] bytes)
+        {
+            List<string> _fileHex = new(bytes.Length);
+            foreach (var b in bytes)
+            {
+                _fileHex.Add(b.ToString("X2"));
+            }
+            return _fileHex;
+        }
+    }
+
     public partial class Upload : IAsyncDisposable
     {
         ElementReference fileDropContainer;
@@ -15,8 +33,8 @@ namespace visual_binary_analysis.Pages
         IJSObjectReference? _filePasteFunctionReference;
 
         private string? HoverClass;
-        private byte[]? fileBytes;
-        private List<string>? fileHex;
+
+        private FileData fileData;
         private string? ErrorMessage;
 
 
@@ -43,25 +61,17 @@ namespace visual_binary_analysis.Pages
             using var stream = file.OpenReadStream();
             using var ms = new MemoryStream();
             await stream.CopyToAsync(ms);
-            fileBytes = ms.ToArray();
-            fileHex = BytesToHex(fileBytes);
+            var fileBytes = ms.ToArray();
+            fileData = new FileData(fileBytes);
 
             // source = $"data:{file.ContentType};base64,{Convert.ToBase64String(fileBytes)}";
 
             HoverClass = string.Empty;
         }
 
-        static private List<string> BytesToHex(byte[] bytes)
-        {
-            List<string> _fileHex = new(bytes.Length);
-            foreach (var b in bytes)
-            {
-                _fileHex.Add(b.ToString("X2"));
-            }
-            return _fileHex;
-        }
 
-        string GetOpacity(string hex)
+
+        static string GetOpacity(string hex)
         {
             return "var(--byte-" + hex[0].ToString() + ")";
         }

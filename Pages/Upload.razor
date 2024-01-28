@@ -11,15 +11,59 @@
 <div class="error-message-container">
     <p>@ErrorMessage</p>
 </div>
-@if (fileHex != null)
+@if (fileData.Bytes != null)
 {
-    <div class="bytes-view">
-        <div class="hex-bytes-view">
-            @foreach (var h in fileHex)
+    <div class="raw-bytes-view">
+        <div class="bytes-view">
+            <div class="byte-counts">
+                @for (int i = 0; i < fileData.Hex.Count; i += 16)
+                {
+                    <span class="byte-count">
+                        @i.ToString().PadLeft(8, '0')
+                    </span>
+                }
+            </div>
+            <div class="hex-bytes-view">
+                @foreach (var (h, i) in fileData.Hex.Zip(Enumerable.Range(0, fileData.Hex.Count)))
+                {
+                    <span class="hex-byte" id="hex-@i" style="opacity: @GetOpacity(h)">
+                        @h
+                    </span>
+                }
+            </div>
+            <div class="text-bytes-view">
+                @foreach (var (c, i) in fileData.Text.Zip(Enumerable.Range(0, fileData.Text.Length)))
+                {
+                    <span class="text-byte" id="text-@i">
+                        @c
+                    </span>
+                }
+            </div>
+        </div>
+
+        <div class="bytes-map">
+            @foreach (var b in fileData.Bytes)
             {
-                <span style="opacity: @GetOpacity(h)">
-                    @h
-                </span>
+                @if (b == 0)
+                {
+                    <div class="byte-map-cell zero"></div>
+                }
+                else if (b >= 1 && b <= 31)
+                {
+                    <div class="byte-map-cell low"></div>
+                }
+                else if (b >= 32 && b <= 127)
+                {
+                    <div class="byte-map-cell ascii"></div>
+                }
+                else if (b > 127 && b <= 255)
+                {
+                    <div class="byte-map-cell high"></div>
+                }
+                else
+                {
+                    <div class="byte-map-cell max"></div>
+                }
             }
         </div>
     </div>
