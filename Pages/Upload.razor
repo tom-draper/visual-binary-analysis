@@ -3,7 +3,7 @@
 @inject IJSRuntime JSRuntime;
 @implements IAsyncDisposable
 
-<h3>File Upload</h3>
+<h3>Visual Binary Analysis</h3>
 
 <div @ref="fileDropContainer" class="file-drop-zone @HoverClass" @ondragenter="OnDragEnter" @ondragleave="OnDragLeave" @ondragover="OnDragEnter">
     <InputFile OnChange="@OnChange" @ref="inputFile" multiple />
@@ -11,24 +11,38 @@
 <div class="error-message-container">
     <p>@ErrorMessage</p>
 </div>
-<div class="image-container">
-    @foreach(var imageSource in imageSources)
-    {
-        <img src="@imageSource" />
-    }
-</div>
+@if (fileBytes != null)
+{
+    <div class="bytes-view">
+        <div class="hex-bytes-view">
+        @foreach (var b in fileBytes)
+            {
+                <span>
+                    @b.ToString("X2")
+                </span>
+            }
+        </div>
+        <div class="text-bytes-view">
+        @foreach (var c in Convert.ToBase64String(fileBytes))
+            {
+                @c
+            }
+        </div>
+    </div>
+}
 
 @code {
     ElementReference fileDropContainer;
-    InputFile inputFile;
+    InputFile? inputFile;
 
-    IJSObjectReference _filePasteModule;
-    IJSObjectReference _filePasteFunctionReference;
+    IJSObjectReference? _filePasteModule;
+    IJSObjectReference? _filePasteFunctionReference;
 
-    private string HoverClass;
+    private string? HoverClass;
     private List<string> imageSources = new();
-    private const int maxAllowedFiles = 2;
-    private string ErrorMessage;
+    private string? source;
+    private byte[]? fileBytes;
+    private string? ErrorMessage;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -36,7 +50,7 @@
         {
             _filePasteModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/filePaste.js");
 
-            _filePasteFunctionReference = await _filePasteModule.InvokeAsync<IJSObjectReference>("initializeFilePaste", fileDropContainer, inputFile.Element);
+            _filePasteFunctionReference = await _filePasteModule.InvokeAsync<IJSObjectReference>("initializeFilePaste", fileDropContainer, inputFile?.Element);
         }
     }
 
@@ -46,22 +60,16 @@
 
     async Task OnChange(InputFileChangeEventArgs e)
     {
-        imageSources.Clear();
         ErrorMessage = string.Empty;
 
-        if (e.FileCount > maxAllowedFiles)
-        {
-            ErrorMessage = $"Only {maxAllowedFiles} files can be uploaded";
-            return;
-        }
+        var file = e.File;
+        Console.WriteLine(file.ContentType);
+        using var stream = file.OpenReadStream();
+        using var ms = new MemoryStream();
+        await stream.CopyToAsync(ms);
+        fileBytes = ms.ToArray();
 
-        foreach (var file in e.GetMultipleFiles(maxAllowedFiles))
-        {
-            using var stream = file.OpenReadStream();
-            using var ms = new MemoryStream();
-            await stream.CopyToAsync(ms);
-            imageSources.Add($"data:{file.ContentType};base64,{Convert.ToBase64String(ms.ToArray())}");
-        }
+        source = $"data:{file.ContentType};base64,{Convert.ToBase64String(fileBytes)}";
 
         HoverClass = string.Empty;
     }

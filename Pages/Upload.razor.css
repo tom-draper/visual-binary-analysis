@@ -1,6 +1,7 @@
 .file-drop-zone {
     width: 100%;
-    border: 1px dotted grey;
+    border: 1px solid rgb(205, 205, 205);
+    border-radius: 5px;
     display: flex;
     align-items: center;
     margin-bottom: 2px;
@@ -9,17 +10,42 @@
 
 .hover {
     border-style: solid;
-    /* background-color: #00ca71; */
-    background-color: grey;
+    background-color: rgb(185, 185, 185);
 }
 
-.image-container {
+.bytes-view {
     display: flex;
-    justify-content: center;
+    background: black;
+    color: rgb(0 255 0);
+    border-radius: 4px;
+    padding: 5px 8px;
+}
+
+.hex-bytes-view {
+    border-right: 1px solid rgb(205, 205, 205);
+    padding-right: 5px;
+}
+.text-bytes-view {
+    padding-left: 10px;
+    letter-spacing: 1em;
+    max-width: 128ch;
+    word-wrap: break-word;
+}
+.hex-bytes-view {
+    display: grid;  
+    grid-template-columns: repeat(32, 1fr); 
+    place-items: center;
+}
+
+.hex-bytes-view,
+.text-bytes-view {
+    flex: 1;
+    font-size: 0.7em;
+    cursor: text;
 }
 
 .image-container img {
-    width: 50%;
+    width: 100%;
 }
 
 ::deep input[type=file] {
