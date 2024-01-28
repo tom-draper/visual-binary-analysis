@@ -7,11 +7,26 @@ using Microsoft.JSInterop;
 
 namespace visual_binary_analysis.Pages
 {
-    public readonly struct FileData(byte[] bytes)
+    public struct FileData(byte[] bytes)
     {
         public byte[] Bytes { get; } = bytes;
         public List<string> Hex { get; } = BytesToHex(bytes);
         public string Text { get; } = Encoding.UTF8.GetString(bytes);
+
+        public ElementReference[] Refs {get; set;} = EmptyRefs(bytes);
+
+        public List<string> HexHovers {get; set;} = Enumerable.Repeat(string.Empty, bytes.Length).ToList();
+        public List<string> TextHovers {get; set;} = Enumerable.Repeat(string.Empty, bytes.Length).ToList();
+
+        static private ElementReference[] EmptyRefs(byte[] bytes)
+        {
+            var refs = new ElementReference[bytes.Length];
+            for (int i = 0; i < bytes.Length; i++)
+            {
+                refs[i] = new ElementReference();
+            }
+            return refs;
+        } 
 
         static private List<string> BytesToHex(byte[] bytes)
         {
@@ -57,7 +72,6 @@ namespace visual_binary_analysis.Pages
             ErrorMessage = string.Empty;
 
             var file = e.File;
-            Console.WriteLine(file.ContentType);
             using var stream = file.OpenReadStream();
             using var ms = new MemoryStream();
             await stream.CopyToAsync(ms);
@@ -69,11 +83,33 @@ namespace visual_binary_analysis.Pages
             HoverClass = string.Empty;
         }
 
-
-
         static string GetOpacity(string hex)
         {
             return "var(--byte-" + hex[0].ToString() + ")";
+        }
+
+        private async Task OnHexHover(int index)
+        {
+            await JSRuntime.InvokeVoidAsync("addActive", "text-" + index.ToString());
+            await JSRuntime.InvokeVoidAsync("addActive", "byte-" + index.ToString());
+        }
+
+        private async Task OnHexLeave(int index)
+        {
+            await JSRuntime.InvokeVoidAsync("removeActive", "text-" + index.ToString());
+            await JSRuntime.InvokeVoidAsync("removeActive", "byte-" + index.ToString());
+        }
+
+        private async Task OnTextHover(int index)
+        {
+            await JSRuntime.InvokeVoidAsync("addActive", "hex-" + index.ToString());
+            await JSRuntime.InvokeVoidAsync("addActive", "byte-" + index.ToString());
+        }
+
+        private async Task OnTextLeave(int index)
+        {
+            await JSRuntime.InvokeVoidAsync("removeActive", "hex-" + index.ToString());
+            await JSRuntime.InvokeVoidAsync("removeActive", "byte-" + index.ToString());
         }
 
         public async ValueTask DisposeAsync()
