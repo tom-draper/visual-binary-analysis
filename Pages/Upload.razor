@@ -5,8 +5,37 @@
 
 <h3>Visual Binary Analysis</h3>
 
-<div @ref="fileDropContainer" class="file-drop-zone @HoverClass" @ondragenter="OnDragEnter" @ondragleave="OnDragLeave" @ondragover="OnDragEnter">
-    <InputFile OnChange="@OnChange" @ref="inputFile" multiple />
+<div class="header">
+    <div @ref="fileDropContainer" class="file-drop-zone @HoverClass" @ondragenter="OnDragEnter" @ondragleave="OnDragLeave" @ondragover="OnDragEnter">
+        <InputFile OnChange="@OnChange" @ref="inputFile" multiple />
+    </div>
+        <div class="key">
+            <div class="key-item">
+                <div class="color-display zero"></div>
+                <div class="color-label">0x000</div>
+            </div>
+
+            <div class="key-item">
+                <div class="color-display low"></div>
+                <div class="color-label">Low</div>
+            </div>
+
+            <div class="key-item">
+                <div class="color-display ascii"></div>
+                <div class="color-label">ASCII</div>
+            </div>
+
+            <div class="key-item">
+                <div class="color-display high"></div>
+                <div class="color-label">High</div>
+            </div>
+
+            <div class="key-item">
+                <div class="color-display max"></div>
+                <div class="color-label">0xfff</div>
+            </div>
+
+        </div>
 </div>
 <div class="error-message-container">
     <p>@ErrorMessage</p>
@@ -26,7 +55,7 @@
             <div class="hex-bytes-view">
                 @foreach (var (h, i) in fileData.Hex.Zip(Enumerable.Range(0, fileData.Hex.Count)))
                 {
-                    <span class="hex-byte" id="hex-@i" style="opacity: @GetOpacity(h)">
+                    <span class="hex-byte" id="hex-@i" onmouseover="@(() => OnHexHover(i))" onmouseleave="@(() => OnHexLeave(i))" style="opacity: @GetOpacity(h)">
                         @h
                     </span>
                 }
@@ -34,7 +63,7 @@
             <div class="text-bytes-view">
                 @foreach (var (c, i) in fileData.Text.Zip(Enumerable.Range(0, fileData.Text.Length)))
                 {
-                    <span class="text-byte" id="text-@i">
+                    <span class="text-byte" id="text-@i"  onmouseover="@(() => OnTextHover(i))" onmouseleave="@(() => OnTextLeave(i))">
                         @c
                     </span>
                 }
@@ -42,28 +71,10 @@
         </div>
 
         <div class="bytes-map">
-            @foreach (var b in fileData.Bytes)
+            @foreach (var (b, i) in fileData.Bytes.Zip(Enumerable.Range(0, fileData.Bytes.Length)))
             {
-                @if (b == 0)
-                {
-                    <div class="byte-map-cell zero"></div>
-                }
-                else if (b >= 1 && b <= 31)
-                {
-                    <div class="byte-map-cell low"></div>
-                }
-                else if (b >= 32 && b <= 127)
-                {
-                    <div class="byte-map-cell ascii"></div>
-                }
-                else if (b > 127 && b <= 255)
-                {
-                    <div class="byte-map-cell high"></div>
-                }
-                else
-                {
-                    <div class="byte-map-cell max"></div>
-                }
+                <div class="byte-map-cell @(b == 0 ? "none" : b >= 1 && b <= 31 ? "low" : b >= 32 && b <= 127 ? "ascii" : b > 127 && b <= 255 ? "high" : "max")" id="byte-@i"></div>
+
             }
         </div>
     </div>
