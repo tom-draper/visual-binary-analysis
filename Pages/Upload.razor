@@ -1,4 +1,4 @@
-﻿@page "/upload"
+﻿@page "/"
 
 @inject IJSRuntime JSRuntime;
 @implements IAsyncDisposable
@@ -11,80 +11,16 @@
 <div class="error-message-container">
     <p>@ErrorMessage</p>
 </div>
-@if (fileBytes != null)
+@if (fileHex != null)
 {
     <div class="bytes-view">
         <div class="hex-bytes-view">
-        @foreach (var b in fileBytes)
+            @foreach (var h in fileHex)
             {
-                <span>
-                    @b.ToString("X2")
+                <span style="opacity: @GetOpacity(h)">
+                    @h
                 </span>
             }
         </div>
-        <div class="text-bytes-view">
-        @foreach (var c in Convert.ToBase64String(fileBytes))
-            {
-                @c
-            }
-        </div>
     </div>
-}
-
-@code {
-    ElementReference fileDropContainer;
-    InputFile? inputFile;
-
-    IJSObjectReference? _filePasteModule;
-    IJSObjectReference? _filePasteFunctionReference;
-
-    private string? HoverClass;
-    private List<string> imageSources = new();
-    private string? source;
-    private byte[]? fileBytes;
-    private string? ErrorMessage;
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            _filePasteModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/filePaste.js");
-
-            _filePasteFunctionReference = await _filePasteModule.InvokeAsync<IJSObjectReference>("initializeFilePaste", fileDropContainer, inputFile?.Element);
-        }
-    }
-
-    void OnDragEnter(DragEventArgs e) => HoverClass = "hover";
-
-    void OnDragLeave(DragEventArgs e) => HoverClass = string.Empty;
-
-    async Task OnChange(InputFileChangeEventArgs e)
-    {
-        ErrorMessage = string.Empty;
-
-        var file = e.File;
-        Console.WriteLine(file.ContentType);
-        using var stream = file.OpenReadStream();
-        using var ms = new MemoryStream();
-        await stream.CopyToAsync(ms);
-        fileBytes = ms.ToArray();
-
-        source = $"data:{file.ContentType};base64,{Convert.ToBase64String(fileBytes)}";
-
-        HoverClass = string.Empty;
-    }
-
-    public async ValueTask DisposeAsync()
-    {
-        if (_filePasteFunctionReference != null)
-        {
-            await _filePasteFunctionReference.InvokeVoidAsync("dispose");
-            await _filePasteFunctionReference.DisposeAsync();
-        }
-
-        if (_filePasteModule != null)
-        {
-            await _filePasteModule.DisposeAsync();
-        }
-    }
 }
