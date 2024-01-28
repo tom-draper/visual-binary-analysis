@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "visual-binary-analysis",
   "resources": {
-    "hash": "sha256-UUio/CS8WGbDcu3kQD1VRU4llfuEZj2uFTV1vwaKovA=",
+    "hash": "sha256-kqtpUMWTCy4WbSirojlnlmL9VvkB/BLqNFwkSR8dVO0=",
     "jsModuleNative": {
       "dotnet.native.8.0.1.koovngoc0i.js": "sha256-7zgYwmQflKxtTlVxdnf87WKBxRWY38sXrXidGeGW9sI="
     },
@@ -48,7 +48,7 @@
       "System.Text.Encodings.Web.wasm": "sha256-+xy+tOrpZQfQay41WvWhFxGHmHiYCwxIZC0u0YeG8MY=",
       "System.Text.Json.wasm": "sha256-3+CtWg+4SO1T+15o1W5mTBoxvMzlPRN8VPA3AvcZBXM=",
       "System.Text.RegularExpressions.wasm": "sha256-gBOmDgKZBuDoGsHbhJq/ngBU9uslj8K/+ZuZekYrq54=",
-      "visual-binary-analysis.wasm": "sha256-zQBkNZPLxzqh2+MNZ2FXYJJCY23fhWFAgBXvdHfmkRE="
+      "visual-binary-analysis.wasm": "sha256-sd8wNoLpq7iMrkeyTyI991/oV5itoGXe2XcfY1L+f28="
     }
   },
   "cacheBootResources": true,
