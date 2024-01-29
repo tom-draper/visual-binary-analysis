@@ -9,33 +9,58 @@ namespace visual_binary_analysis.Pages
 {
     public struct FileData(byte[] bytes)
     {
-        public byte[] Bytes { get; } = bytes;
-        public List<string> Hex { get; } = BytesToHex(bytes);
-        public string Text { get; } = Encoding.UTF8.GetString(bytes);
+        public int PageIndex { get; set; } = 0;
+        static public int PageSize { get; set; } = 2048;
+        public List<Page> Pages { get; set; } = BuildPages(bytes, PageSize);
 
-        public ElementReference[] Refs {get; set;} = EmptyRefs(bytes);
-
-        public List<string> HexHovers {get; set;} = Enumerable.Repeat(string.Empty, bytes.Length).ToList();
-        public List<string> TextHovers {get; set;} = Enumerable.Repeat(string.Empty, bytes.Length).ToList();
-
-        static private ElementReference[] EmptyRefs(byte[] bytes)
+        public readonly struct Page(byte[] bytes)
         {
-            var refs = new ElementReference[bytes.Length];
-            for (int i = 0; i < bytes.Length; i++)
+            public byte[] Bytes { get; } = bytes;
+            public List<string> Hex { get; } = BytesToHex(bytes);
+            public string Text { get; } = Encoding.UTF8.GetString(bytes);
+        }
+
+        static private List<Page> BuildPages(byte[] bytes, int pageSize)
+        {
+            List<Page> pages = [];
+            for (int i = 0; i < bytes.Length; i += pageSize)
             {
-                refs[i] = new ElementReference();
+                Page page = new(bytes[i..Math.Min(bytes.Length - 1, i + pageSize)]);
+                pages.Add(page);
             }
-            return refs;
-        } 
+            return pages;
+        }
+
+        public readonly Page CurrentPage()
+        {
+            if (Pages.Count == 0)
+            {
+                return new Page([]);
+            }
+            return Pages[PageIndex];
+        }
+
+        public void SetPage(int pageNumber)
+        {
+            PageIndex = pageNumber;
+        }
+
+        public readonly int ByteStartIndex()
+        {
+            return PageIndex * PageSize;
+        }
 
         static private List<string> BytesToHex(byte[] bytes)
         {
-            List<string> _fileHex = new(bytes.Length);
-            foreach (var b in bytes)
-            {
-                _fileHex.Add(b.ToString("X2"));
-            }
-            return _fileHex;
+            return bytes.Select(b => b.ToString("X2")).ToList();
+        }
+    }
+
+    public class Utils
+    {
+        public static string GetOpacity(string hex)
+        {
+            return "var(--byte-" + hex[0].ToString() + ")";
         }
     }
 
@@ -83,35 +108,49 @@ namespace visual_binary_analysis.Pages
             HoverClass = string.Empty;
         }
 
-        static string GetOpacity(string hex)
+        private async Task OnHover(string source, int index)
         {
-            return "var(--byte-" + hex[0].ToString() + ")";
+            if (index > FileData.PageSize) {
+                return;
+            }
+            switch (source)
+            {
+                case "hex":
+                    await JSRuntime.InvokeVoidAsync("addActive", "text-" + index.ToString());
+                    await JSRuntime.InvokeVoidAsync("addActive", "byte-" + index.ToString());
+                    break;
+                case "text":
+                    await JSRuntime.InvokeVoidAsync("addActive", "hex-" + index.ToString());
+                    await JSRuntime.InvokeVoidAsync("addActive", "byte-" + index.ToString());
+                    break;
+                case "byte":
+                    await JSRuntime.InvokeVoidAsync("addActive", "hex-" + index.ToString());
+                    await JSRuntime.InvokeVoidAsync("addActive", "text-" + index.ToString());
+                    break;
+            }
         }
 
-        private async Task OnHexHover(int index)
+        private async Task OnLeave(string source, int index)
         {
-            await JSRuntime.InvokeVoidAsync("addActive", "text-" + index.ToString());
-            await JSRuntime.InvokeVoidAsync("addActive", "byte-" + index.ToString());
+            if (index > FileData.PageSize) {
+                return;
+            }
+            switch (source)
+            {
+                case "hex":
+                    await JSRuntime.InvokeVoidAsync("removeActive", "text-" + index.ToString());
+                    await JSRuntime.InvokeVoidAsync("removeActive", "byte-" + index.ToString());
+                    break;
+                case "text":
+                    await JSRuntime.InvokeVoidAsync("removeActive", "hex-" + index.ToString());
+                    await JSRuntime.InvokeVoidAsync("removeActive", "byte-" + index.ToString());
+                    break;
+                case "byte":
+                    await JSRuntime.InvokeVoidAsync("removeActive", "hex-" + index.ToString());
+                    await JSRuntime.InvokeVoidAsync("removeActive", "text-" + index.ToString());
+                    break;
+            }
         }
-
-        private async Task OnHexLeave(int index)
-        {
-            await JSRuntime.InvokeVoidAsync("removeActive", "text-" + index.ToString());
-            await JSRuntime.InvokeVoidAsync("removeActive", "byte-" + index.ToString());
-        }
-
-        private async Task OnTextHover(int index)
-        {
-            await JSRuntime.InvokeVoidAsync("addActive", "hex-" + index.ToString());
-            await JSRuntime.InvokeVoidAsync("addActive", "byte-" + index.ToString());
-        }
-
-        private async Task OnTextLeave(int index)
-        {
-            await JSRuntime.InvokeVoidAsync("removeActive", "hex-" + index.ToString());
-            await JSRuntime.InvokeVoidAsync("removeActive", "byte-" + index.ToString());
-        }
-
         public async ValueTask DisposeAsync()
         {
             if (_filePasteFunctionReference != null)
@@ -125,5 +164,12 @@ namespace visual_binary_analysis.Pages
                 await _filePasteModule.DisposeAsync();
             }
         }
+
+        public void SetPage(int pageNumber)
+        {
+            fileData.SetPage(pageNumber);
+            StateHasChanged();
+        }
+
     }
 }
