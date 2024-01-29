@@ -1,41 +1,52 @@
 .file-drop-zone {
     flex: 1;
     width: 100%;
-    border: 1px solid rgb(205, 205, 205);
+    /* border: 1px solid rgb(205, 205, 205); */
     border-radius: 5px;
     display: flex;
     align-items: center;
     margin-bottom: 2px;
-    min-height: 100px;
-    background: #f9f9f9;
+    /* min-height: 100px; */
+    /* background: #f9f9f9; */
+    background: black;
+    /* background: rgb(35, 35, 35); */
+    /* border: 1px solid rgb(0 255 0); */
 }
 
 .hover {
     border-style: solid;
-    background-color: rgb(185, 185, 185);
+    /* background-color: rgb(185, 185, 185); */
+    background: rgba(0 255 0 20%);
+    /* background-color: rgba(0 255 0 / 20%); */
 }
+
 .header {
     width: 100%;
     display: flex;
 }
+
 .key {
     margin: auto 0;
     padding: 0 20px;
     width: 287px;
     text-align: left;
 }
+
 .key-item {
     display: flex;
+    justify-content: right;
 }
+
 .color-display {
     width: 17px;
     height: 17px;
-    border: 1px solid rgb(210, 210, 210);
+    /* border: 1px solid rgb(210, 210, 210); */
     border-radius: 4px;
 }
+
 .color-label {
     font-size: 13px;
-    margin-left: 10px;
+    margin-right: 10px;
 }
 
 .raw-bytes-view {
@@ -60,19 +71,23 @@
     place-items: center;
     height: fit-content;
 }
+
 .byte-count {
     height: 17px;
 }
+
 .hex-bytes-view {
     height: fit-content;
 }
+
 .text-bytes-view {
     color: #e8e8e8;
 }
+
 .text-bytes-view,
 .hex-bytes-view {
     display: grid;
-    grid-template-columns: repeat(16, 1fr); 
+    grid-template-columns: repeat(16, 1fr);
     place-items: center;
     flex: 1;
 }
@@ -100,6 +115,33 @@
     opacity: 100% !important;
 }
 
+.page-numbers {
+    display: flex;
+    font-size: 0.8em;
+    margin: 2em 0;
+}
+
+.page-number {
+    color: #555;
+    margin: 0 3px;
+    background: none;
+    /* color: inherit; */
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+}
+
+.page-number:hover {
+    color: white;
+    cursor: pointer;
+}
+
+.active-page {
+    color: rgb(0 255 0);
+    margin: 0 3px;
+}
 
 .bytes-map {
     display: grid;
@@ -109,22 +151,32 @@
     border-radius: 4px;
     overflow: hidden;
 }
+
 .byte-map-cell {
     width: 17px;
     height: 17px;
 }
+
+.byte-map-cell-final {
+    border-bottom-right-radius: 4px;
+}
+
 .zero {
     background-color: black;
 }
+
 .low {
     background-color: rgb(45, 166, 45);
 }
+
 .ascii {
     background-color: blue;
 }
+
 .high {
     background-color: red;
 }
+
 .max {
     background-color: white;
 }
