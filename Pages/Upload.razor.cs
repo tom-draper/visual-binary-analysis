@@ -10,7 +10,7 @@ namespace visual_binary_analysis.Pages
     public struct FileData(byte[] bytes)
     {
         public int PageIndex { get; set; } = 0;
-        static private int PageSize { get; set; } = 2048;
+        static public int PageSize { get; set; } = 2048;
         public List<Page> Pages { get; set; } = BuildPages(bytes, PageSize);
 
         public readonly struct Page(byte[] bytes)
@@ -45,19 +45,14 @@ namespace visual_binary_analysis.Pages
             PageIndex = pageNumber;
         }
 
-        public int ByteStartIndex()
+        public readonly int ByteStartIndex()
         {
             return PageIndex * PageSize;
         }
 
         static private List<string> BytesToHex(byte[] bytes)
         {
-            List<string> _fileHex = new(bytes.Length);
-            foreach (var b in bytes)
-            {
-                _fileHex.Add(b.ToString("X2"));
-            }
-            return _fileHex;
+            return bytes.Select(b => b.ToString("X2")).ToList();
         }
     }
 
@@ -115,6 +110,9 @@ namespace visual_binary_analysis.Pages
 
         private async Task OnHover(string source, int index)
         {
+            if (index > FileData.PageSize) {
+                return;
+            }
             switch (source)
             {
                 case "hex":
@@ -134,6 +132,9 @@ namespace visual_binary_analysis.Pages
 
         private async Task OnLeave(string source, int index)
         {
+            if (index > FileData.PageSize) {
+                return;
+            }
             switch (source)
             {
                 case "hex":
@@ -167,7 +168,6 @@ namespace visual_binary_analysis.Pages
         public void SetPage(int pageNumber)
         {
             fileData.SetPage(pageNumber);
-            Console.WriteLine(pageNumber);
             StateHasChanged();
         }
 

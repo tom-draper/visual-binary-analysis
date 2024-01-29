@@ -51,7 +51,7 @@
                 @for (int i = 0; i < fileData.CurrentPage().Hex.Count; i += 16)
                 {
                     <span class="byte-count">
-                        @fileData.ByteStartIndex().ToString().PadLeft(8, '0')
+                        @((fileData.ByteStartIndex() + i).ToString().PadLeft(8, '0'))
                     </span>
                 }
             </div>
@@ -79,7 +79,6 @@
         </div>
 
         <div class="bytes-map">
-           fileData.CurrentPage().Bytes.Length)))
            @for (int i = 0; i < fileData.CurrentPage().Bytes.Length; i++)
             {
                 var index = i;
