@@ -1,0 +1,101 @@
+@page "/"
+
+@inject IJSRuntime JSRuntime;
+@implements IAsyncDisposable
+
+<h2>Visual Binary Analysis</h2>
+
+<div class="header">
+    <div @ref="fileDropContainer" class="file-drop-zone @HoverClass" @ondragenter="OnDragEnter"
+        @ondragleave="OnDragLeave" @ondragover="OnDragEnter">
+        <InputFile OnChange="@OnChange" @ref="inputFile" multiple />
+    </div>
+    <div class="key">
+        @if (!fileData.Equals(default(FileData)))
+        {
+            <div class="key-item">
+                <div class="color-label">0x000</div>
+                <div class="color-display zero"></div>
+            </div>
+
+            <div class="key-item">
+                <div class="color-label">Low</div>
+                <div class="color-display low"></div>
+            </div>
+
+            <div class="key-item">
+                <div class="color-label">ASCII</div>
+                <div class="color-display ascii"></div>
+            </div>
+
+            <div class="key-item">
+                <div class="color-label">High</div>
+                <div class="color-display high"></div>
+            </div>
+
+            <div class="key-item">
+                <div class="color-label">0xfff</div>
+                <div class="color-display max"></div>
+            </div>
+        }
+    </div>
+</div>
+<div class="error-message-container">
+    <p>@ErrorMessage</p>
+</div>
+@if (!fileData.Equals(default(FileData)))
+{
+    <div class="raw-bytes-view">
+        <div class="bytes-view">
+            <div class="byte-counts">
+                @for (int i = 0; i < fileData.CurrentPage().Hex.Count; i += 16)
+                {
+                    <span class="byte-count">
+                        @fileData.ByteStartIndex().ToString().PadLeft(8, '0')
+                    </span>
+                }
+            </div>
+            <div class="hex-bytes-view">
+                @for (int i = 0; i < fileData.CurrentPage().Hex.Count; i++)
+                {
+                    var index = i;
+                    <span class="hex-byte" id="hex-@index" onmouseover="@(() => OnHover("hex", index))"
+                        onmouseleave="@(() => OnLeave("hex", index))"
+                        style="opacity: @Utils.GetOpacity(fileData.CurrentPage().Hex[index])">
+                        @fileData.CurrentPage().Hex[index]
+                    </span>
+                }
+            </div>
+            <div class="text-bytes-view">
+                @for (int i = 0; i < fileData.CurrentPage().Text.Length; i++)
+                {
+                    var index = i;
+                    <span class="text-byte" id="text-@index" onmouseover="@(() => OnHover("text", index))"
+                        onmouseleave="@(() => OnLeave("text", index))">
+                        @fileData.CurrentPage().Text[index]
+                    </span>
+                }
+            </div>
+        </div>
+
+        <div class="bytes-map">
+           fileData.CurrentPage().Bytes.Length)))
+           @for (int i = 0; i < fileData.CurrentPage().Bytes.Length; i++)
+            {
+                var index = i;
+                <div class="byte-map-cell @(index == fileData.CurrentPage().Bytes.Length - 1 ? "byte-map-cell-final" : "") @(fileData.CurrentPage().Bytes[index] == 0 ? "zero" : fileData.CurrentPage().Bytes[index] >= 1 && fileData.CurrentPage().Bytes[index] <= 31 ? "low" : fileData.CurrentPage().Bytes[index] >= 32 && fileData.CurrentPage().Bytes[index] <= 127 ? "ascii" : fileData.CurrentPage().Bytes[index] > 127 && fileData.CurrentPage().Bytes[index] <= 255 ? "high" : "max")"
+                    id="byte-@index" onmouseover="@(() => OnHover("byte", index))" onmouseleave="@(() => OnLeave("byte", index))"></div>
+            }
+        </div>
+    </div>
+    <div class="page-numbers">
+        @for (int i = 0; i < fileData.Pages.Count; i++)
+        {
+            var pageIndex = i;
+            <button class="page-number @(pageIndex == fileData.PageIndex ? "active-page" : "")"
+                onclick="@(() => SetPage(pageIndex))">
+                @(pageIndex+1)
+            </button>
+        }
+    </div>
+}
