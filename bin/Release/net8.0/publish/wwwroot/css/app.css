@@ -1,3 +1,7 @@
+@font-face {
+    font-family: 'pixel';
+    src: url('../fonts/game over.ttf');
+}
 :root {
     --byte-F: 100%;
     --byte-E: 96%;
@@ -17,9 +21,17 @@
     --byte-0: 40%;
 }
 
+h2 {
+    font-family: 'pixel';
+    color: rgb(0 255 0);
+    font-size: 2em;
+}
+
 html,
 body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: #101010;
+    color: #e8e8e8;
 }
 
 h1:focus {
