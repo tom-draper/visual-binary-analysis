@@ -21,8 +21,9 @@
 .key {
     margin: auto 0;
     padding: 0 20px;
-    width: 287px;
+    width: 303px;
     text-align: left;
+    color: #888 
 }
 
 .key-item {
@@ -45,6 +46,53 @@
     display: flex;
 }
 
+.raw-bytes-view-control {
+    display: flex;
+    margin-bottom: 6px;
+}
+
+.bytes-counts-control {
+    width: 65px;
+}
+
+.text-bytes-view-control,
+.hex-bytes-view-control {
+    display: flex;
+    margin-left: 10px;
+    flex: 1;
+}
+
+.bytes-map-control {
+    width: 303px;
+}
+
+.control-btn {
+    margin: 0 5px;
+    border-radius: 4px;
+    background: black;
+    color: rgb(0 255 0);
+    /* border: 1px solid rgb(0 255 0); */
+    padding: 1px 8px;
+    font-size: 11px;
+    border: none;
+}
+.text-search {
+    background: black;
+    height: 20px;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    font-size: 11px;
+    padding: 0 8px;
+    flex-grow: 1;
+}
+
+
+.control-btn:hover {
+    background: rgb(0 255 0);
+    color: black;
+}
+
 .bytes-view {
     display: flex;
     background: black;
@@ -52,6 +100,11 @@
     border-radius: 4px;
     padding: 8px 10px;
     flex: 1;
+}
+
+.active-btn {
+    background: rgb(0 255 0);
+    color: black !important;
 }
 
 .byte-counts {
@@ -73,6 +126,7 @@
 
 .text-bytes-view {
     color: #e8e8e8;
+    height: fit-content;
 }
 
 .text-bytes-view,
@@ -98,6 +152,12 @@
     height: 17px;
 }
 
+.text-byte,
+.hex-byte,
+.byte-map-cell {
+    transition: 0.05s;
+}
+
 .active,
 .byte-map-cell:hover,
 .text-byte:hover,
@@ -111,6 +171,7 @@
     display: flex;
     font-size: 0.8em;
     margin: 0.8em 1em 2em;
+    flex-flow: wrap;
 }
 
 .page-number {
@@ -138,7 +199,9 @@
     display: grid;
     grid-template-columns: repeat(16, 17px);
     height: max-content;
-    margin: 8px 0 8px 15px;
+    margin-left: 15px;
+    padding: 8px;
+    background: black;;
     border-radius: 4px;
     overflow: hidden;
 }

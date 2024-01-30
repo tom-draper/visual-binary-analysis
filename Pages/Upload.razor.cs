@@ -7,18 +7,38 @@ using Microsoft.JSInterop;
 
 namespace visual_binary_analysis.Pages
 {
+    public enum TextEncoding
+    {
+        UTF8,
+        UTF7,
+        UTF32,
+        Unicode,
+        ASCII
+    }
     public struct FileData(byte[] bytes)
     {
         public int PageIndex { get; set; } = 0;
         static public int PageSize { get; set; } = 2048;
         public List<Page> Pages { get; set; } = BuildPages(bytes, PageSize);
+        public static TextEncoding TextEncoding { get; set; } = TextEncoding.UTF8;
 
         public readonly struct Page(byte[] bytes)
         {
             public byte[] Bytes { get; } = bytes;
             public List<string> Hex { get; } = BytesToHex(bytes);
-            public string Text { get; } = Encoding.UTF8.GetString(bytes);
+            public readonly string Text()
+            {
+                return TextEncoding switch
+                {
+                    TextEncoding.UTF8 => Encoding.UTF8.GetString(Bytes),
+                    TextEncoding.Unicode => Encoding.Unicode.GetString(Bytes),
+                    TextEncoding.ASCII => Encoding.ASCII.GetString(Bytes),
+                    TextEncoding.UTF32 => Encoding.UTF32.GetString(Bytes),
+                    _ => Encoding.UTF8.GetString(Bytes),
+                };
+            }
         }
+
 
         static private List<Page> BuildPages(byte[] bytes, int pageSize)
         {
@@ -43,6 +63,11 @@ namespace visual_binary_analysis.Pages
         public void SetPage(int pageNumber)
         {
             PageIndex = pageNumber;
+        }
+
+        public static void SetTextEncoding(TextEncoding encoding)
+        {
+            TextEncoding = encoding;
         }
 
         public readonly int ByteStartIndex()
@@ -77,6 +102,8 @@ namespace visual_binary_analysis.Pages
         private FileData fileData;
         private string? ErrorMessage;
 
+        private string? SearchText { get; set; }
+
 
         void OnDragEnter(DragEventArgs e) => HoverClass = "hover";
 
@@ -97,7 +124,8 @@ namespace visual_binary_analysis.Pages
             ErrorMessage = string.Empty;
 
             var file = e.File;
-            using var stream = file.OpenReadStream();
+            long maxFileSize = 1024L * 1024L * 1024L * 2L;
+            using var stream = file.OpenReadStream(maxAllowedSize: maxFileSize);
             using var ms = new MemoryStream();
             await stream.CopyToAsync(ms);
             var fileBytes = ms.ToArray();
@@ -110,7 +138,8 @@ namespace visual_binary_analysis.Pages
 
         private async Task OnHover(string source, int index)
         {
-            if (index > FileData.PageSize) {
+            if (index > FileData.PageSize)
+            {
                 return;
             }
             switch (source)
@@ -132,7 +161,8 @@ namespace visual_binary_analysis.Pages
 
         private async Task OnLeave(string source, int index)
         {
-            if (index > FileData.PageSize) {
+            if (index > FileData.PageSize)
+            {
                 return;
             }
             switch (source)
@@ -170,6 +200,15 @@ namespace visual_binary_analysis.Pages
             fileData.SetPage(pageNumber);
             StateHasChanged();
         }
+        public void SetTextEncoding(TextEncoding encoding)
+        {
+            FileData.SetTextEncoding(encoding);
+            StateHasChanged();
+        }
 
+        public void Search()
+        {
+            Console.WriteLine(SearchText);
+        }
     }
 }

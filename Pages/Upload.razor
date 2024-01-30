@@ -45,6 +45,23 @@
 </div>
 @if (!fileData.Equals(default(FileData)))
 {
+    <div class="raw-bytes-view-control">
+        <div class="bytes-counts-control">
+
+        </div>
+        <div class="hex-bytes-view-control">
+        </div>
+        <div class="text-bytes-view-control">
+            <button class="control-btn @(FileData.TextEncoding == TextEncoding.UTF8 ? "active-btn" : "")" onclick="@(() => SetTextEncoding(TextEncoding.UTF8))">UTF-8</button>
+            <button class="control-btn @(FileData.TextEncoding == TextEncoding.UTF32 ? "active-btn" : "")" onclick="@(() => SetTextEncoding(TextEncoding.UTF32))">UTF-32</button>
+            <button class="control-btn @(FileData.TextEncoding == TextEncoding.Unicode ? "active-btn" : "")" onclick="@(() => SetTextEncoding(TextEncoding.Unicode))">Unicode</button>
+            <button class="control-btn @(FileData.TextEncoding == TextEncoding.ASCII ? "active-btn" : "")" onclick="@(() => SetTextEncoding(TextEncoding.ASCII))">ASCII</button>
+            <input class="text-search" type="text" name="search" id="" placeholder="Search..." @bind="SearchText">
+        </div>
+        <div class="bytes-map-control">
+
+        </div>
+    </div>
     <div class="raw-bytes-view">
         <div class="bytes-view">
             <div class="byte-counts">
@@ -67,12 +84,12 @@
                 }
             </div>
             <div class="text-bytes-view">
-                @for (int i = 0; i < fileData.CurrentPage().Text.Length; i++)
+                @for (int i = 0; i < fileData.CurrentPage().Text().Length; i++)
                 {
                     var index = i;
                     <span class="text-byte" id="text-@index" onmouseover="@(() => OnHover("text", index))"
                         onmouseleave="@(() => OnLeave("text", index))">
-                        @fileData.CurrentPage().Text[index]
+                        @fileData.CurrentPage().Text()[index]
                     </span>
                 }
             </div>
