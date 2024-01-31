@@ -1,11 +1,10 @@
 .file-drop-zone {
     flex: 1;
     width: 100%;
-    border-radius: 5px;
+    border-radius: 4px;
     display: flex;
     align-items: center;
     margin-bottom: 2px;
-    background: black;
 }
 
 .hover {
@@ -21,8 +20,9 @@
 .key {
     margin: auto 0;
     padding: 0 20px;
-    width: 287px;
+    width: 303px;
     text-align: left;
+    color: #888 
 }
 
 .key-item {
@@ -45,6 +45,52 @@
     display: flex;
 }
 
+.raw-bytes-view-control {
+    display: flex;
+    margin-bottom: 6px;
+}
+
+.bytes-counts-control {
+    width: 65px;
+}
+
+.text-bytes-view-control,
+.hex-bytes-view-control {
+    display: flex;
+    margin-left: 10px;
+    flex: 1;
+}
+
+.bytes-map-control {
+    width: 303px;
+}
+
+.control-btn {
+    margin: 0 5px;
+    border-radius: 4px;
+    background: black;
+    color: rgb(0 255 0);
+    padding: 1px 8px;
+    font-size: 11px;
+    border: none;
+}
+.text-search {
+    background: black;
+    height: 20px;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    font-size: 11px;
+    padding: 0 8px;
+    flex-grow: 1;
+}
+
+
+.control-btn:hover {
+    background: rgb(0 255 0);
+    color: black;
+}
+
 .bytes-view {
     display: flex;
     background: black;
@@ -52,6 +98,11 @@
     border-radius: 4px;
     padding: 8px 10px;
     flex: 1;
+}
+
+.active-btn {
+    background: rgb(0 255 0);
+    color: black !important;
 }
 
 .byte-counts {
@@ -73,6 +124,7 @@
 
 .text-bytes-view {
     color: #e8e8e8;
+    height: fit-content;
 }
 
 .text-bytes-view,
@@ -92,25 +144,68 @@
 .text-byte,
 .hex-byte {
     padding: 0 2px;
-    border-radius: 3px;
     width: 100%;
     text-align: center;
     height: 17px;
+}
+
+.text-byte,
+.hex-byte,
+.byte-map-cell {
+    transition: 0.05s;
 }
 
 .active,
 .byte-map-cell:hover,
 .text-byte:hover,
 .hex-byte:hover {
-    background-color: rgb(0 255 0) !important;
+    background: rgb(0 255 0);
+}
+
+.highlight,
+.highlight-start,
+.highlight-end {
+    background: rgb(255, 255, 0) !important;
+}
+
+.active,
+.byte-map-cell:hover,
+.text-byte:hover,
+.hex-byte:hover,
+.highlight,
+.highlight-start,
+.highlight-end {
     color: black;
     opacity: 100% !important;
+}
+
+.hex-byte.active,
+.text-byte.active,
+.text-byte:hover,
+.hex-byte:hover {
+    border-radius: 3px;
+}
+
+.text-byte.highlight {
+    border-radius: 0;
+}
+.highlight {
+    border-radius: 0;
+}   
+.highlight-start {
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+.highlight-end {
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
 }
 
 .page-numbers {
     display: flex;
     font-size: 0.8em;
     margin: 0.8em 1em 2em;
+    flex-flow: wrap;
 }
 
 .page-number {
@@ -126,7 +221,6 @@
 
 .page-number:hover {
     color: white;
-    cursor: pointer;
 }
 
 .active-page {
@@ -138,7 +232,8 @@
     display: grid;
     grid-template-columns: repeat(16, 17px);
     height: max-content;
-    margin: 8px 0 8px 15px;
+    margin-left: 15px;
+    padding: 8px;
     border-radius: 4px;
     overflow: hidden;
 }
@@ -152,24 +247,26 @@
     border-bottom-right-radius: 4px;
 }
 
+.file-drop-zone,
+.bytes-map,
 .zero {
-    background-color: black;
+    background: black;
 }
 
 .low {
-    background-color: rgb(45, 166, 45);
+    background: rgb(45, 166, 45);
 }
 
 .ascii {
-    background-color: blue;
+    background: blue;
 }
 
 .high {
-    background-color: red;
+    background: red;
 }
 
 .max {
-    background-color: white;
+    background: white;
 }
 
 .image-container img {
