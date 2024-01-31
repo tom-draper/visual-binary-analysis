@@ -26,7 +26,7 @@ namespace visual_binary_analysis.Pages
         public readonly struct Page(byte[] bytes)
         {
             public byte[] Bytes { get; } = bytes;
-            public List<string> Hex { get; } = BytesToHex(bytes);
+            public string[] Hex { get; } = BytesToHex(bytes);
             public readonly string Text()
             {
                 return TextEncoding switch
@@ -76,9 +76,9 @@ namespace visual_binary_analysis.Pages
             return PageIndex * PageSize;
         }
 
-        static private List<string> BytesToHex(byte[] bytes)
+        static private string[] BytesToHex(byte[] bytes)
         {
-            return bytes.Select(b => b.ToString("X2")).ToList();
+            return bytes.Select(b => b.ToString("X2")).ToArray();
         }
     }
 
@@ -112,7 +112,6 @@ namespace visual_binary_analysis.Pages
             if (firstRender)
             {
                 _filePasteModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/filePaste.js");
-
                 _filePasteFunctionReference = await _filePasteModule.InvokeAsync<IJSObjectReference>("initializeFilePaste", fileDropContainer, inputFile?.Element);
             }
         }
@@ -141,16 +140,16 @@ namespace visual_binary_analysis.Pages
             switch (source)
             {
                 case "hex":
-                    await JSRuntime.InvokeVoidAsync("addClass", "text-" + index.ToString(), "active");
-                    await JSRuntime.InvokeVoidAsync("addClass", "byte-" + index.ToString(), "active");
+                    await JSRuntime.InvokeVoidAsync("addActive", "text-" + index.ToString());
+                    await JSRuntime.InvokeVoidAsync("addActive", "byte-" + index.ToString());
                     break;
                 case "text":
-                    await JSRuntime.InvokeVoidAsync("addClass", "hex-" + index.ToString(), "active");
-                    await JSRuntime.InvokeVoidAsync("addClass", "byte-" + index.ToString(), "active");
+                    await JSRuntime.InvokeVoidAsync("addActive", "hex-" + index.ToString());
+                    await JSRuntime.InvokeVoidAsync("addActive", "byte-" + index.ToString());
                     break;
                 case "byte":
-                    await JSRuntime.InvokeVoidAsync("addClass", "hex-" + index.ToString(), "active");
-                    await JSRuntime.InvokeVoidAsync("addClass", "text-" + index.ToString(), "active");
+                    await JSRuntime.InvokeVoidAsync("addActive", "hex-" + index.ToString());
+                    await JSRuntime.InvokeVoidAsync("addActive", "text-" + index.ToString());
                     break;
             }
         }
@@ -162,16 +161,16 @@ namespace visual_binary_analysis.Pages
             switch (source)
             {
                 case "hex":
-                    await JSRuntime.InvokeVoidAsync("removeClass", "text-" + index.ToString(), "active");
-                    await JSRuntime.InvokeVoidAsync("removeClass", "byte-" + index.ToString(), "active");
+                    await JSRuntime.InvokeVoidAsync("removeActive", "text-" + index.ToString());
+                    await JSRuntime.InvokeVoidAsync("removeActive", "byte-" + index.ToString());
                     break;
                 case "text":
-                    await JSRuntime.InvokeVoidAsync("removeClass", "hex-" + index.ToString(), "active");
-                    await JSRuntime.InvokeVoidAsync("removeClass", "byte-" + index.ToString(), "active");
+                    await JSRuntime.InvokeVoidAsync("removeActive", "hex-" + index.ToString());
+                    await JSRuntime.InvokeVoidAsync("removeActive", "byte-" + index.ToString());
                     break;
                 case "byte":
-                    await JSRuntime.InvokeVoidAsync("removeClass", "hex-" + index.ToString(), "active");
-                    await JSRuntime.InvokeVoidAsync("removeClass", "text-" + index.ToString(), "active");
+                    await JSRuntime.InvokeVoidAsync("removeActive", "hex-" + index.ToString());
+                    await JSRuntime.InvokeVoidAsync("removeActive", "text-" + index.ToString());
                     break;
             }
         }
@@ -242,7 +241,7 @@ namespace visual_binary_analysis.Pages
             }
         }
 
-        private async Task OnChange(ChangeEventArgs e)
+        public async Task OnTextChange(ChangeEventArgs e)
         {
             await ClearHighlight();
             if (e.Value == null)

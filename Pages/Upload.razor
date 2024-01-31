@@ -60,7 +60,7 @@
                 onclick="@(() => SetTextEncoding(TextEncoding.Unicode))">Unicode</button>
             <button class="control-btn @(FileData.TextEncoding == TextEncoding.ASCII ? "active-btn" : "")"
                 onclick="@(() => SetTextEncoding(TextEncoding.ASCII))">ASCII</button>
-            <input class="text-search" type="text" name="search" id="" placeholder="Search..." @onchange="OnChange">
+            <input class="text-search" type="text" name="search" id="" placeholder="Search..." @onchange="OnTextChange">
         </div>
         <div class="bytes-map-control">
 
@@ -69,7 +69,7 @@
     <div class="raw-bytes-view">
         <div class="bytes-view">
             <div class="byte-counts">
-                @for (int i = 0; i < fileData.CurrentPage().Hex.Count; i += 16)
+                @for (int i = 0; i < fileData.CurrentPage().Hex.Length; i += 16)
                 {
                     <span class="byte-count">
                         @((fileData.ByteStartIndex() + i).ToString().PadLeft(8, '0'))
@@ -77,7 +77,7 @@
                 }
             </div>
             <div class="hex-bytes-view">
-                @for (int i = 0; i < fileData.CurrentPage().Hex.Count; i++)
+                @for (int i = 0; i < fileData.CurrentPage().Hex.Length; i++)
                 {
                     int index = i;
                     <span class="hex-byte" id="hex-@index" onmouseover="@(() => OnHover("hex", index))"

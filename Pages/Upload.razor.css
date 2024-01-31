@@ -1,11 +1,10 @@
 .file-drop-zone {
     flex: 1;
     width: 100%;
-    border-radius: 5px;
+    border-radius: 4px;
     display: flex;
     align-items: center;
     margin-bottom: 2px;
-    background: black;
 }
 
 .hover {
@@ -71,7 +70,6 @@
     border-radius: 4px;
     background: black;
     color: rgb(0 255 0);
-    /* border: 1px solid rgb(0 255 0); */
     padding: 1px 8px;
     font-size: 11px;
     border: none;
@@ -146,7 +144,6 @@
 .text-byte,
 .hex-byte {
     padding: 0 2px;
-    /* border-radius: 3px; */
     width: 100%;
     text-align: center;
     height: 17px;
@@ -158,30 +155,26 @@
     transition: 0.05s;
 }
 
+.active,
+.byte-map-cell:hover,
+.text-byte:hover,
+.hex-byte:hover {
+    background: rgb(0 255 0);
+}
+
 .highlight,
 .highlight-start,
 .highlight-end {
-    background-color: rgb(255, 255, 0) !important;
-    color: black;
-    opacity: 100% !important;
-}
-.highlight {
-    border-radius: 0;
-}
-.highlight-start {
-    border-top-left-radius: 3px;
-    border-bottom-left-radius: 3px;
-}
-.highlight-end {
-    border-top-right-radius: 3px;
-    border-bottom-right-radius: 3px;
+    background: rgb(255, 255, 0) !important;
 }
 
 .active,
 .byte-map-cell:hover,
 .text-byte:hover,
-.hex-byte:hover {
-    background-color: rgb(0 255 0) !important;
+.hex-byte:hover,
+.highlight,
+.highlight-start,
+.highlight-end {
     color: black;
     opacity: 100% !important;
 }
@@ -191,6 +184,21 @@
 .text-byte:hover,
 .hex-byte:hover {
     border-radius: 3px;
+}
+
+.text-byte.highlight {
+    border-radius: 0;
+}
+.highlight {
+    border-radius: 0;
+}   
+.highlight-start {
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+.highlight-end {
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
 }
 
 .page-numbers {
@@ -213,7 +221,6 @@
 
 .page-number:hover {
     color: white;
-    cursor: pointer;
 }
 
 .active-page {
@@ -227,7 +234,6 @@
     height: max-content;
     margin-left: 15px;
     padding: 8px;
-    background: black;
     border-radius: 4px;
     overflow: hidden;
 }
@@ -241,24 +247,26 @@
     border-bottom-right-radius: 4px;
 }
 
+.file-drop-zone,
+.bytes-map,
 .zero {
-    background-color: black;
+    background: black;
 }
 
 .low {
-    background-color: rgb(45, 166, 45);
+    background: rgb(45, 166, 45);
 }
 
 .ascii {
-    background-color: blue;
+    background: blue;
 }
 
 .high {
-    background-color: red;
+    background: red;
 }
 
 .max {
-    background-color: white;
+    background: white;
 }
 
 .image-container img {
