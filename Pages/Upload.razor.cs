@@ -1,4 +1,3 @@
-using System.Numerics;
 using System.Text;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
@@ -55,9 +54,7 @@ namespace visual_binary_analysis.Pages
         public readonly Page CurrentPage()
         {
             if (Pages.Count == 0)
-            {
                 return new Page([]);
-            }
             return Pages[PageIndex];
         }
 
@@ -109,11 +106,10 @@ namespace visual_binary_analysis.Pages
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            if (firstRender)
-            {
-                _filePasteModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/filePaste.js");
-                _filePasteFunctionReference = await _filePasteModule.InvokeAsync<IJSObjectReference>("initializeFilePaste", fileDropContainer, inputFile?.Element);
-            }
+            if (!firstRender)
+                return;
+            _filePasteModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/filePaste.js");
+            _filePasteFunctionReference = await _filePasteModule.InvokeAsync<IJSObjectReference>("initializeFilePaste", fileDropContainer, inputFile?.Element);
         }
 
         async Task OnChange(InputFileChangeEventArgs e)
@@ -193,6 +189,7 @@ namespace visual_binary_analysis.Pages
             fileData.SetPage(pageNumber);
             StateHasChanged();
         }
+
         public void SetTextEncoding(TextEncoding encoding)
         {
             FileData.SetTextEncoding(encoding);
@@ -208,6 +205,22 @@ namespace visual_binary_analysis.Pages
         // {
         //     var path = (string)patharg.Value;
         //     Console.WriteLine(path);
+        // }
+        //
+        // private async Task Search(KeyboardEventArgs e)
+        // {
+        //     Console.WriteLine(e.Key);
+        //     Console.WriteLine(e.Code);
+        //     Console.WriteLine(e.Repeat);
+        //     Console.WriteLine(e.Location);
+        //     Console.WriteLine(e.AltKey);
+        //     Console.WriteLine(e.CtrlKey);
+        //     Console.WriteLine(e.ShiftKey);
+        //     Console.WriteLine(e.MetaKey);
+        //     Console.WriteLine(e.Type);
+        //     Console.WriteLine(e.TimeStamp);
+        //     Console.WriteLine(e.IsComposing);
+        //     Console.WriteLine(e.CharCode);
         // }
 
         private readonly List<int> HighlightedChars = [];
