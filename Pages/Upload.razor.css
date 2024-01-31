@@ -146,7 +146,7 @@
 .text-byte,
 .hex-byte {
     padding: 0 2px;
-    border-radius: 3px;
+    /* border-radius: 3px; */
     width: 100%;
     text-align: center;
     height: 17px;
@@ -158,6 +158,25 @@
     transition: 0.05s;
 }
 
+.highlight,
+.highlight-start,
+.highlight-end {
+    background-color: rgb(255, 255, 0) !important;
+    color: black;
+    opacity: 100% !important;
+}
+.highlight {
+    border-radius: 0;
+}
+.highlight-start {
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+.highlight-end {
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
 .active,
 .byte-map-cell:hover,
 .text-byte:hover,
@@ -165,6 +184,13 @@
     background-color: rgb(0 255 0) !important;
     color: black;
     opacity: 100% !important;
+}
+
+.hex-byte.active,
+.text-byte.active,
+.text-byte:hover,
+.hex-byte:hover {
+    border-radius: 3px;
 }
 
 .page-numbers {
@@ -201,7 +227,7 @@
     height: max-content;
     margin-left: 15px;
     padding: 8px;
-    background: black;;
+    background: black;
     border-radius: 4px;
     overflow: hidden;
 }

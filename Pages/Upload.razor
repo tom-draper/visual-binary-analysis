@@ -52,11 +52,15 @@
         <div class="hex-bytes-view-control">
         </div>
         <div class="text-bytes-view-control">
-            <button class="control-btn @(FileData.TextEncoding == TextEncoding.UTF8 ? "active-btn" : "")" onclick="@(() => SetTextEncoding(TextEncoding.UTF8))">UTF-8</button>
-            <button class="control-btn @(FileData.TextEncoding == TextEncoding.UTF32 ? "active-btn" : "")" onclick="@(() => SetTextEncoding(TextEncoding.UTF32))">UTF-32</button>
-            <button class="control-btn @(FileData.TextEncoding == TextEncoding.Unicode ? "active-btn" : "")" onclick="@(() => SetTextEncoding(TextEncoding.Unicode))">Unicode</button>
-            <button class="control-btn @(FileData.TextEncoding == TextEncoding.ASCII ? "active-btn" : "")" onclick="@(() => SetTextEncoding(TextEncoding.ASCII))">ASCII</button>
-            <input class="text-search" type="text" name="search" id="" placeholder="Search..." @bind="SearchText">
+            <button class="control-btn @(FileData.TextEncoding == TextEncoding.UTF8 ? "active-btn" : "")"
+                onclick="@(() => SetTextEncoding(TextEncoding.UTF8))">UTF-8</button>
+            <button class="control-btn @(FileData.TextEncoding == TextEncoding.UTF32 ? "active-btn" : "")"
+                onclick="@(() => SetTextEncoding(TextEncoding.UTF32))">UTF-32</button>
+            <button class="control-btn @(FileData.TextEncoding == TextEncoding.Unicode ? "active-btn" : "")"
+                onclick="@(() => SetTextEncoding(TextEncoding.Unicode))">Unicode</button>
+            <button class="control-btn @(FileData.TextEncoding == TextEncoding.ASCII ? "active-btn" : "")"
+                onclick="@(() => SetTextEncoding(TextEncoding.ASCII))">ASCII</button>
+            <input class="text-search" type="text" name="search" id="" placeholder="Search..." @onchange="OnChange">
         </div>
         <div class="bytes-map-control">
 
@@ -75,7 +79,7 @@
             <div class="hex-bytes-view">
                 @for (int i = 0; i < fileData.CurrentPage().Hex.Count; i++)
                 {
-                    var index = i;
+                    int index = i;
                     <span class="hex-byte" id="hex-@index" onmouseover="@(() => OnHover("hex", index))"
                         onmouseleave="@(() => OnLeave("hex", index))"
                         style="opacity: @Utils.GetOpacity(fileData.CurrentPage().Hex[index])">
@@ -86,7 +90,7 @@
             <div class="text-bytes-view">
                 @for (int i = 0; i < fileData.CurrentPage().Text().Length; i++)
                 {
-                    var index = i;
+                    int index = i;
                     <span class="text-byte" id="text-@index" onmouseover="@(() => OnHover("text", index))"
                         onmouseleave="@(() => OnLeave("text", index))">
                         @fileData.CurrentPage().Text()[index]
@@ -96,21 +100,22 @@
         </div>
 
         <div class="bytes-map">
-           @for (int i = 0; i < fileData.CurrentPage().Bytes.Length; i++)
+            @for (int i = 0; i < fileData.CurrentPage().Bytes.Length; i++)
             {
-                var index = i;
+                int index = i;
                 <div class="byte-map-cell @(index == fileData.CurrentPage().Bytes.Length - 1 ? "byte-map-cell-final" : "") @(fileData.CurrentPage().Bytes[index] == 0 ? "zero" : fileData.CurrentPage().Bytes[index] >= 1 && fileData.CurrentPage().Bytes[index] <= 31 ? "low" : fileData.CurrentPage().Bytes[index] >= 32 && fileData.CurrentPage().Bytes[index] <= 127 ? "ascii" : fileData.CurrentPage().Bytes[index] > 127 && fileData.CurrentPage().Bytes[index] <= 255 ? "high" : "max")"
-                    id="byte-@index" onmouseover="@(() => OnHover("byte", index))" onmouseleave="@(() => OnLeave("byte", index))"></div>
+                    id="byte-@index" onmouseover="@(() => OnHover("byte", index))"
+                    onmouseleave="@(() => OnLeave("byte", index))"></div>
             }
         </div>
     </div>
     <div class="page-numbers">
         @for (int i = 0; i < fileData.Pages.Count; i++)
         {
-            var pageIndex = i;
+            int pageIndex = i;
             <button class="page-number @(pageIndex == fileData.PageIndex ? "active-page" : "")"
                 onclick="@(() => SetPage(pageIndex))">
-                @(pageIndex+1)
+                @(pageIndex + 1)
             </button>
         }
     </div>
