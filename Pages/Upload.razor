@@ -103,20 +103,23 @@
             @for (int i = 0; i < fileData.CurrentPage().Bytes.Length; i++)
             {
                 int index = i;
-                <div class="byte-map-cell @(index == fileData.CurrentPage().Bytes.Length - 1 ? "byte-map-cell-final" : "") @(fileData.CurrentPage().Bytes[index] == 0 ? "zero" : fileData.CurrentPage().Bytes[index] >= 1 && fileData.CurrentPage().Bytes[index] <= 31 ? "low" : fileData.CurrentPage().Bytes[index] >= 32 && fileData.CurrentPage().Bytes[index] <= 127 ? "ascii" : fileData.CurrentPage().Bytes[index] > 127 && fileData.CurrentPage().Bytes[index] <= 255 ? "high" : "max")"
+                <div class="byte-map-cell @(index == 0 ? "byte-map-cell-first" : "") @(index == 15 ? "byte-map-cell-top-right" : "") @(index + 16 > fileData.CurrentPage().Bytes.Length - 1 && index % 16 == 0 ? "byte-map-cell-bottom-left" : "") @((index + 16 > fileData.CurrentPage().Bytes.Length - 1 && (index + 1) % 16 == 0) || index == fileData.CurrentPage().Bytes.Length - 1 ? "byte-map-cell-bottom-right" : "") @(fileData.CurrentPage().Bytes[index] == 0 ? "zero" : fileData.CurrentPage().Bytes[index] >= 1 && fileData.CurrentPage().Bytes[index] <= 31 ? "low" : fileData.CurrentPage().Bytes[index] >= 32 && fileData.CurrentPage().Bytes[index] <= 127 ? "ascii" : fileData.CurrentPage().Bytes[index] > 127 && fileData.CurrentPage().Bytes[index] <= 255 ? "high" : "max")"
                     id="byte-@index" onmouseover="@(() => OnHover("byte", index))"
                     onmouseleave="@(() => OnLeave("byte", index))"></div>
             }
         </div>
     </div>
-    <div class="page-numbers">
-        @for (int i = 0; i < fileData.Pages.Count; i++)
-        {
-            int pageIndex = i;
-            <button class="page-number @(pageIndex == fileData.PageIndex ? "active-page" : "")"
-                onclick="@(() => SetPage(pageIndex))">
-                @(pageIndex + 1)
-            </button>
-        }
-    </div>
+    @if (fileData.Pages.Count > 1)
+    {
+        <div class="page-numbers">
+            @for (int i = 0; i < fileData.Pages.Count; i++)
+            {
+                int pageIndex = i;
+                <button class="page-number @(pageIndex == fileData.PageIndex ? "active-page" : "")"
+                    onclick="@(() => SetPage(pageIndex))">
+                    @(pageIndex + 1)
+                </button>
+            }
+        </div>
+    }
 }
