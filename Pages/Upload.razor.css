@@ -243,7 +243,16 @@
     height: 17px;
 }
 
-.byte-map-cell-final {
+.byte-map-cell-first {
+    border-top-left-radius: 4px;
+}
+.byte-map-cell-top-right {
+    border-top-right-radius: 4px;
+}
+.byte-map-cell-bottom-left {
+    border-bottom-left-radius: 4px;
+}
+.byte-map-cell-bottom-right {
     border-bottom-right-radius: 4px;
 }
 
