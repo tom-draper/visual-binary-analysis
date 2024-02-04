@@ -403,7 +403,16 @@ main[b-h6yof0megn] {
     height: 17px;
 }
 
-.byte-map-cell-final[b-e9c3qu2r5o] {
+.byte-map-cell-first[b-e9c3qu2r5o] {
+    border-top-left-radius: 4px;
+}
+.byte-map-cell-top-right[b-e9c3qu2r5o] {
+    border-top-right-radius: 4px;
+}
+.byte-map-cell-bottom-left[b-e9c3qu2r5o] {
+    border-bottom-left-radius: 4px;
+}
+.byte-map-cell-bottom-right[b-e9c3qu2r5o] {
     border-bottom-right-radius: 4px;
 }
 
