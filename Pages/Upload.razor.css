@@ -155,6 +155,29 @@
     transition: 0.05s;
 }
 
+
+.file-drop-zone,
+.bytes-map,
+.zero {
+    background: black;
+}
+
+.low {
+    background: rgb(45, 166, 45);
+}
+
+.ascii {
+    background: blue;
+}
+
+.high {
+    background: red;
+}
+
+.max {
+    background: white;
+}
+
 .active,
 .byte-map-cell:hover,
 .text-byte:hover,
@@ -256,27 +279,6 @@
     border-bottom-right-radius: 4px;
 }
 
-.file-drop-zone,
-.bytes-map,
-.zero {
-    background: black;
-}
-
-.low {
-    background: rgb(45, 166, 45);
-}
-
-.ascii {
-    background: blue;
-}
-
-.high {
-    background: red;
-}
-
-.max {
-    background: white;
-}
 
 .image-container img {
     width: 100%;
