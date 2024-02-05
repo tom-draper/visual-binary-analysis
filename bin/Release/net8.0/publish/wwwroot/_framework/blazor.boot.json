@@ -1,12 +1,12 @@
 {
   "mainAssemblyName": "visual-binary-analysis",
   "resources": {
-    "hash": "sha256-us7ejc7oTAsP29kFjIzd6/Mdpw/c8HKa8NTzb5/3lp0=",
+    "hash": "sha256-CQVHs9TYAPYuwAJKeIEHkzPLI82MqTW2rAF9/CzC2m4=",
     "jsModuleNative": {
-      "dotnet.native.8.0.1.koovngoc0i.js": "sha256-7zgYwmQflKxtTlVxdnf87WKBxRWY38sXrXidGeGW9sI="
+      "dotnet.native.8.0.1.dz0y2rth2l.js": "sha256-7zgYwmQflKxtTlVxdnf87WKBxRWY38sXrXidGeGW9sI="
     },
     "jsModuleRuntime": {
-      "dotnet.runtime.8.0.1.rswtxkdyko.js": "sha256-HZOoaGpz9ekMa/oSmeApSKp3DXNdVUq2UBqsTIIiN8A="
+      "dotnet.runtime.8.0.1.rswtxkdyko.js": "sha256-ZNMNd1DBE/dP8jtdrJU916p/AA5oF8KGmD41LXbZuyc="
     },
     "wasmNative": {
       "dotnet.native.wasm": "sha256-N9z4WjYLXdGxdijLBPjZcDl547QcL3q0OxPc30h58G8="
@@ -46,7 +46,7 @@
       "System.Text.Encodings.Web.wasm": "sha256-+xy+tOrpZQfQay41WvWhFxGHmHiYCwxIZC0u0YeG8MY=",
       "System.Text.Json.wasm": "sha256-1UMR1AS5xQplFWBFPk0uLBYzUKN1BHQqRuDsYxxquDo=",
       "System.Text.RegularExpressions.wasm": "sha256-gBOmDgKZBuDoGsHbhJq/ngBU9uslj8K/+ZuZekYrq54=",
-      "visual-binary-analysis.wasm": "sha256-HEvi9PV7h6ZsJA6nuUn3PJ5b+nrkuY4aIFjSimaPqwk="
+      "visual-binary-analysis.wasm": "sha256-haF35Nmsr+n9UcYfMtC8XhskB+VPkXu/rytPA8Rwqoo="
     }
   },
   "cacheBootResources": true,

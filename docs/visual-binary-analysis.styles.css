@@ -315,6 +315,29 @@ main[b-h6yof0megn] {
     transition: 0.05s;
 }
 
+
+.file-drop-zone[b-e9c3qu2r5o],
+.bytes-map[b-e9c3qu2r5o],
+.zero[b-e9c3qu2r5o] {
+    background: black;
+}
+
+.low[b-e9c3qu2r5o] {
+    background: rgb(45, 166, 45);
+}
+
+.ascii[b-e9c3qu2r5o] {
+    background: blue;
+}
+
+.high[b-e9c3qu2r5o] {
+    background: red;
+}
+
+.max[b-e9c3qu2r5o] {
+    background: white;
+}
+
 .active[b-e9c3qu2r5o],
 .byte-map-cell:hover[b-e9c3qu2r5o],
 .text-byte:hover[b-e9c3qu2r5o],
@@ -416,27 +439,6 @@ main[b-h6yof0megn] {
     border-bottom-right-radius: 4px;
 }
 
-.file-drop-zone[b-e9c3qu2r5o],
-.bytes-map[b-e9c3qu2r5o],
-.zero[b-e9c3qu2r5o] {
-    background: black;
-}
-
-.low[b-e9c3qu2r5o] {
-    background: rgb(45, 166, 45);
-}
-
-.ascii[b-e9c3qu2r5o] {
-    background: blue;
-}
-
-.high[b-e9c3qu2r5o] {
-    background: red;
-}
-
-.max[b-e9c3qu2r5o] {
-    background: white;
-}
 
 .image-container img[b-e9c3qu2r5o] {
     width: 100%;
